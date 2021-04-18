@@ -45,14 +45,17 @@ function getFinalUserData(user_data) {
 async function getUserData(database, obj) {
     try {
         let user_details = null;
+        let total_users = 0;
         const query = filterHandling.getQuery(obj);
         const sort_order = filterHandling.getSortOrder(obj);
         const user_data = await User.getUserData(database, query, sort_order, obj.page, obj.limit);
+        total_users = await User.getTotalUsers(database, query);
+        total_users = total_users.rows[0].count;
         if(user_data.rows.length) {
             user_details = getFinalUserData(user_data.rows);
-            return user_details;
+            return { user_details, total_users} ;
         }
-        return user_details;
+        return { user_details, total_users };
     } catch (e) {
         console.log(e);
         throw new Error(e);

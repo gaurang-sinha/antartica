@@ -78,12 +78,14 @@ async function getUser(req, res) {
             page,
             limit
         };
-        console.log(data_obj);
-        const user_data = await bl.getUserData(db.postgres, data_obj);
+        const user_data_details = await bl.getUserData(db.postgres, data_obj);
+        const user_data = user_data_details.user_details;
+        const total_users = user_data_details.total_users;
         responseData = Utility.handleResponse(200, "SUCCESS");
         responseData['meta']['data'] = {
             "error": null,
             "user_data": user_data,
+            "total_users": total_users
         };
         res.status(responseData.meta.code).json(responseData);
     } catch (err) {

@@ -15,7 +15,10 @@ module.exports = class User {
     }
     static async getUserData(database, query, sort_order, page, limit) {
         const sql = `Select a.*, b.* from users a join employee b on a.emp_id = b.emp_id where a.is_delete = false and b.is_delete = false  ${query} ${sort_order} limit ${limit} OFFSET ${Utility.getOffset(page, limit)}`;
-        console.log(sql)
+        return database.query(sql);
+    }
+    static async getTotalUsers(database, query) {
+        const sql = `Select count(1) as count from users a join employee b on a.emp_id = b.emp_id where a.is_delete = false and b.is_delete = false  ${query}` ;
         return database.query(sql);
     }
 }
