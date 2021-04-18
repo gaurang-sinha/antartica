@@ -54,17 +54,19 @@ function getQuery(obj) {
 }
 
 function getSortOrder(obj) {
-    const sort_order = obj.sort_order;
     let sort_order_query = ' ';
     let order_list = [];
-    if(sort_order.length) {
-        for(let i = 0; i< sort_order.length; i++) {
-            const column = sort_order[i]['sort_by'];
-            const order = sort_order[i]['order'];
-            order_list.push(` b.${column} ${order} `);
+    if(!!obj.sort_order) {
+        const sort_order = obj.sort_order;
+        if(sort_order.length) {
+            for(let i = 0; i< sort_order.length; i++) {
+                const column = sort_order[i]['sort_by'];
+                const order = sort_order[i]['order'];
+                order_list.push(` b.${column} ${order} `);
+            }
+            sort_order_query = `order by  ${order_list.join(', ')}`;
+            console.log(sort_order_query);
         }
-        sort_order_query = `order by  ${order_list.join(', ')}`;
-        console.log(sort_order_query);
     }
     return sort_order_query;
 }
